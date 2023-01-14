@@ -1,0 +1,83 @@
+Renode
+
+	insmod my_driver.ko
+	mknod /dev/my_device_driver c 140 0
+	./ioctl_app.o
+
+~/Linux make menuconfig
+
+	cd ~/linux
+	rm ~/linux/arch/riscv/boot/Image
+	make -j$(nproc)
+	make modules -j$(nproc)
+	sudo make modules_install
+	sudo make headers_install ARCH=riscv INSTALL_HDR_PATH=/usr
+	rm ~/renode_portable/bins/Image
+	cp ~/linux/arch/riscv/boot/Image ~/renode_portable/bins/
+	
+
+
+
+
+RISCV-GCC
+	
+
+cd ~/buildroot/output/host/bin 
+./riscv32-linux-gcc ~/renode_portable/bins/ioctl_app.c -I/home/debian/linux/drivers/misc -march=rv32g -mabi=ilp32 -o ioctl_app.o
+
+
+
+RAMDISK	
+	cd ~/renode_portable/bins
+	rm ~/renode_portable/bins/rootfs -r
+	mkdir rootfs && cd rootfs
+	cd ~/renode_portable/bins/rootfs
+	cat ../rootfs.cpio | cpio -idmv
+	cp ~/linux/drivers/misc/my_driver* ~/renode_portable/bins/rootfs/root
+	cp ~/buildroot/output/host/bin/ioctl_app.o  ~/renode_portable/bins/rootfs/root
+	find . | cpio -o -H newc -R root:root > ../rootfs.cpio
+	
+	
+
+	
+
+
+RENODE dmesgS
+
+	s @litex.resc
+	renode -e "s @litex.resc"
+ 	
+	insmod my_driver.ko
+	mknod /dev/my_device_driver c 140 0
+	./ioctl_app.o
+
+	cat /dev/my_device_driver
+
+	rmmod my_driver
+
+~/renode_portable/bins
+	sudo dtc -I dts -O dtb -o rv32.dtb rv32.dts
+ 	chmod a+rwx rv32.dtb
+
+~/renode_portable
+	cd ~/renode_portable
+	renode
+
+Clone SSH 
+	Host github.com
+ 	 Hostname ssh.github.com
+ 	 Port 443
+
+	sudo nano ~/.ssh/config
+	ssh -T git@github.com
+
+	git clone git@github.com:linux-drivers-put-course/simple-character-device-driver-Wojtaszek632.git
+
+	arch/riscv/cpu/mtrap.S:65: Error: unrecognized opcode `csrr a0,scause'
+	arch/riscv/cpu/mtrap.S:66: Error: unrecognized opcode `csrr a1,sepc'
+	arch/riscv/cpu/mtrap.S:67: Error: unrecognized opcode `csrr a2,stval'
+	arch/riscv/cpu/mtrap.S:70: Error: unrecognized opcode `csrw sepc,a0'
+
+
+
+
