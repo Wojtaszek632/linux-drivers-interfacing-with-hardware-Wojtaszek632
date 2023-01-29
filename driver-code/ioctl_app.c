@@ -14,7 +14,7 @@ int main(void) {
 	
 	int fd = open("/dev/my_device_driver", O_RDWR);
 	
-	if (fd < 0) {	printf("Unable to open driver\n"); 	return 0;	}
+	if (fd < 0) {	printf("Unable to open driver\n"); 	return 1;	}
 	
 	printf("Opened the driver!\n");
 	
@@ -22,18 +22,18 @@ int main(void) {
 	writeBuff = "2";
 	//my_ioctl_data data ={5,10,addition};
 	
-	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 0;	}
+	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 1;	}
 	
 	writeBuff = "10";
-	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 0;	}
+	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 1;	}
 	
 	
 	printf("Writing IOCTL!\n");	
 	
-	if (ioctl(fd, operation_add, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 0;	}
+	if (ioctl(fd, operation_add, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 1;	}
 	
 		
-	if (read(fd, readBuff, 50 ) < 0) {  printf("Unable to read from driver\n");	return 0;	}
+	if (read(fd, readBuff, 50 ) < 0) {  printf("Unable to read from driver\n");	return 1;	}
 		
 	printf("RECIVED FROM DRIVER:  ");
 	printf("%s",readBuff);
@@ -43,19 +43,19 @@ int main(void) {
    	writeBuff = "2";
 	//my_ioctl_data data ={5,10,addition}
 	
-	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 0;	}
+	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 1;	}
 	
 	writeBuff = "0";
-	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 0;	}
+	if (write(fd, writeBuff, 4 ) < 0) {  printf("Unable to write to driver\n");	return 1;	}
 	
 	
 	printf("Writing IOCTL!\n");	
 	
-	if (ioctl(fd, operation_div, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 0;	}
+	if (ioctl(fd, operation_div, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 1;	}
 	
-		if (ioctl(fd, check_status, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 0;	}
+		if (ioctl(fd, check_status, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 1;	}
 		
-		if (ioctl(fd, error_ack, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 0;	}
+		if (ioctl(fd, error_ack, 0) < 0) {printf("Unable to handle IOCTL\n"); perror("Error:");	return 1;	}
 	
 		
 	

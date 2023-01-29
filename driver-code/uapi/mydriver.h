@@ -10,6 +10,7 @@
 
 #define check_status _IO('w', 6)
 #define error_ack _IO('w', 7)
+#define reset _IO('w', 8)
 
 typedef enum
 {

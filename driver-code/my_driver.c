@@ -130,7 +130,14 @@ static long my_ioctl (struct file *file, unsigned int cmd,unsigned long arg)
 			if( copy_from_user(&mid, (my_ioctl_data *) arg, sizeof(my_ioctl_data)) )
 				return -EFAULT;
 		break;
-			
+
+		case reset:
+		pr_info("K Requesting: reset\n");
+		iowrite32(0, peripheral->regs + DAT0_REG_OFFSET);
+		iowrite32(0, peripheral->regs + DAT1_REG_OFFSET);
+		iowrite32(OPERATION_ADD, peripheral->regs + OPERATION_REG_OFFSET);
+		break;
+
 		case  operation_add:
 		pr_info("K Requesting: OPERATION_ADD\n");
 		iowrite32(OPERATION_ADD,peripheral->regs + OPERATION_REG_OFFSET);		
